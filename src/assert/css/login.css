@@ -1,0 +1,14 @@
+.loginBox {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    padding: 1rem 3.5rem;
+    border-radius: 10px;
+}
+
+.loginContainer {
+    padding-top: 2.5rem;
+}
+.heading{
+    padding-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+}

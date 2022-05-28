@@ -4,6 +4,10 @@ import { gapi } from "gapi-script";
 import { clientId } from '../../config/AppConfig';
 import { useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom';
+import { Typography } from 'antd';
+import "../../assert/css/login.css";
+
+const { Title } = Typography;
 
 
 const Index = () => {
@@ -23,14 +27,23 @@ const Index = () => {
 
 
   return (
-      <>{isAuthenticated ? (
-        <Navigate to={"/dashboard"} replace />
-      ) : (
-        <div>
-          <Login />
+    <>{isAuthenticated ? (
+      <Navigate to={"/dashboard"} replace />
+    ) : (
+      <div className='loginContainer'>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className="loginBox">
+            <div className='heading'>
+              <Title level={3}>Login</Title>
+            </div>
+            <div className='bottom' >
+              <Login />
+            </div>
+          </div>
         </div>
-      )}
-      </>
+      </div>
+    )}
+    </>
   )
 }
 

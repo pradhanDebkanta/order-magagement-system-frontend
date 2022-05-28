@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [orderCards, setOrderCards] = useState([]);
   const [isModalOpen, setmodalOpen] = useState(false);
   const [initFormData, setInitForm] = useState({});
+  const [rerender, setRerender] = useState(false);
 
   useEffect(() => {
     let data = {
@@ -27,13 +28,12 @@ const Dashboard = () => {
       itemCount
     }
     dispatch(getLimitedOrder(data));
-  }, [pageNo, itemCount, isModalOpen]);
+  }, [pageNo, itemCount]);
 
   useEffect(() => {
-    console.log(orderList, totalOrders, "from dashboard")
     constructItem(orderList);
-
-  }, [orderList, totalOrders, isModalOpen]);
+    console.log(orderList, totalOrders, "from dashboard compoment");
+  }, [orderList, totalOrders, rerender]);
 
   const onDeleteOrder = (id) => {
     dispatch(deleteOrder(id));
@@ -48,6 +48,7 @@ const Dashboard = () => {
   const onAction = (flag) => {
     console.log(flag);
     setmodalOpen(flag);
+    setRerender(!rerender);
   }
 
   const newOrder = () => {
@@ -69,7 +70,7 @@ const Dashboard = () => {
       ...data,
       formType: "Edit order details"
     };
-    console.log(dumData, "dum")
+    // console.log(dumData, "dum")
     setInitForm(dumData);
     setmodalOpen(true);
 
@@ -77,6 +78,7 @@ const Dashboard = () => {
 
   function constructItem(totalOrders) {
     let buildData = totalOrders?.map((item, idx) => {
+      console.log("call")
       return (
         <Col xs={24} sm={24} md={24} lg={12} xl={12} key={item.id}>
           <div className="card">

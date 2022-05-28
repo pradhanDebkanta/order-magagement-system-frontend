@@ -63,13 +63,13 @@ export const createOrder = (data) => async dispatch => {
     }
 }
 
-export const editOrder = (id, data) => async dispatch => {
+export const editOrder = (data) => async dispatch => {
     try {
-        const res = await ApiService.patch(`/orderDetails/${id}`, {}, data)
-        console.log(res, "from editOrder");
+        const res = await ApiService.patch(`/orderDetails/${data.id}`, {}, data)
+        console.log(res.data, "from editOrder");
         dispatch({
             type: EDIT_ORDER,
-            payload: res
+            payload: res.data
         })
 
     } catch (err) {

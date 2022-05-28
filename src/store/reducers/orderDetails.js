@@ -14,7 +14,7 @@ const orderDetails = (state = initialState, action) => {
         case CREATE_ORDER:
             state.orderList.pop();
             state.orderList.unshift(payload);
-            console.log(state,"create order store");
+            // console.log(state,"create order store");
             return {
                 ...state,
                 loading: false,

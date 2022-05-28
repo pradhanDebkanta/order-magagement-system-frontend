@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const { Option } = Select;
 const products = [
-    { value: "product1", name: "Product 1" },
-    { value: "product2", name: "Product 2" },
-    { value: "product3", name: "Product 3" },
+    { value: "Product 1", name: "Product 1" },
+    { value: "Product 2", name: "Product 2" },
+    { value: "Product 3", name: "Product 3" },
 ]
 
 const OrderForm = ({ onAction, initData, open }) => {
@@ -19,7 +19,7 @@ const OrderForm = ({ onAction, initData, open }) => {
 
     const productValue = () => {
         let prodValue = products.filter((item) => item.name == initData.product);
-        return prodValue[0].value;
+        return prodValue[0]?.value;
     }
 
 
@@ -181,7 +181,7 @@ const OrderForm = ({ onAction, initData, open }) => {
                                 },
                             ]}
                         >
-                            <InputNumber min={1} max={10} onChange={(value) => console.log(value)} />
+                            <InputNumber min={1} max={10} onChange={(value) => {}} />
                         </Form.Item>
 
                         {/* <Form.Item

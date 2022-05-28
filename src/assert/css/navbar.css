@@ -1,0 +1,39 @@
+.navbarContainer {
+    background-color: #9BA3EB;
+}
+
+.navbarBox {
+    padding: 10px 8px 8px;
+    margin: 0px 5% 8px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.profile {
+    cursor: pointer;
+    border-radius: 100%;
+    margin-top: 6px;
+}
+
+.profile .image>span>img {
+    /* height: 40px; */
+    width: auto;
+    border-radius: 100%;
+    cursor: pointer;
+
+}
+
+.profile .letter {
+}
+
+.logoutButton {
+    border-radius: 50px;
+}
+
+.logoutButton>button {
+    border-radius: 50x !important;
+}

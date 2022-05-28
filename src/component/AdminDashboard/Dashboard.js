@@ -78,7 +78,7 @@ const Dashboard = () => {
 
   function constructItem(totalOrders) {
     let buildData = totalOrders?.map((item, idx) => {
-      console.log("call")
+      console.log("call", item.id)
       return (
         <Col xs={24} sm={24} md={24} lg={12} xl={12} key={item.id}>
           <div className="card">

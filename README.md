@@ -16,7 +16,7 @@ _Here I made a advanced folder structure of Redux Store and a production level c
  [https://dk-order-management-system.netlify.app/](https://dk-order-management-system.netlify.app/) 
  
  ## There is a json server for this app
- [[https://dk-order-management-system.netlify.app/](https://github.com/pradhanDebkanta/fake-server)]([https://dk-order-management-system.netlify.app/](https://github.com/pradhanDebkanta/fake-server)) 
+ [https://github.com/pradhanDebkanta/fake-server](https://github.com/pradhanDebkanta/fake-server)
  
  ##
  [![Build Status](https://miro.medium.com/max/312/1*SRL22ADht1NU4LXUeU4YVg.png)](./)

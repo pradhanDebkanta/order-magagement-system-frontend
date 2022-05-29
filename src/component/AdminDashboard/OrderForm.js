@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Select, InputNumber } from 'antd';
+import React, {  useState } from 'react';
+import {  Modal, Form, Input, Select, InputNumber } from 'antd';
 import { createOrder, editOrder } from "../../store/actions/dashboard";
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 
 const { Option } = Select;
 const products = [
@@ -18,7 +18,7 @@ const OrderForm = ({ onAction, initData, open }) => {
     const [form] = Form.useForm();
 
     const productValue = () => {
-        let prodValue = products.filter((item) => item.name == initData.product);
+        let prodValue = products.filter((item) => item.name === initData.product);
         return prodValue[0]?.value;
     }
 
@@ -39,7 +39,7 @@ const OrderForm = ({ onAction, initData, open }) => {
                     quantity: values.quantity
                 }
                 // console.log(dumData,"dum dat")
-                if (initData?.formType == "Create a new order") {
+                if (initData?.formType === "Create a new order") {
                     dispatch(createOrder(dumData));
                 } else {
                     dispatch(editOrder(dumData));
@@ -58,13 +58,13 @@ const OrderForm = ({ onAction, initData, open }) => {
 
     };
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    // const onFinish = (values) => {
+    //     console.log('Success:', values);
+    // };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo) => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     const onProductChange = (value) => {
         console.log(value, "product")
@@ -73,7 +73,7 @@ const OrderForm = ({ onAction, initData, open }) => {
     return (
         <div>
             <Modal title={initData?.formType} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} maskClosable={false}
-                okText={initData?.formType == "Create a new order" ? "Create" : "Update"}
+                okText={initData?.formType === "Create a new order" ? "Create" : "Update"}
                 cancelText="Discard"
             // footer={[
             //     <Button key="back" onClick={handleCancel}>

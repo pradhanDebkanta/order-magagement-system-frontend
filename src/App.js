@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
-import "antd/dist/antd.less";
+import "antd/dist/antd.css";
 import {
   BrowserRouter,
   Routes,

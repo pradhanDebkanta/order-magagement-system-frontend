@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "antd/dist/antd.css";
 import "../../assert/css/dashboard.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { getLimitedOrder, createOrder, editOrder, deleteOrder } from "../../store/actions/dashboard";
+import { getLimitedOrder,  deleteOrder } from "../../store/actions/dashboard";
 import { v4 as uuidv4 } from "uuid";
 import { Typography, Row, Col, Tooltip, Pagination, Button } from 'antd';
 import { EditOutlined, DeleteOutlined, AppstoreAddOutlined } from "@ant-design/icons";

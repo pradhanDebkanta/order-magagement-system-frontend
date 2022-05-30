@@ -1,18 +1,19 @@
-import React, {  useState } from 'react';
-import {  Modal, Form, Input, Select, InputNumber } from 'antd';
+import React, { useState } from 'react';
+import { Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import { createOrder, editOrder } from "../../store/actions/dashboard";
-import {  useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { Option } = Select;
 const products = [
-    { value: "Product 1", name: "Product 1" },
-    { value: "Product 2", name: "Product 2" },
-    { value: "Product 3", name: "Product 3" },
+    { value: "product1", name: "Product 1" },
+    { value: "product2", name: "Product 2" },
+    { value: "product3", name: "Product 3" },
 ]
 
 const OrderForm = ({ onAction, initData, open }) => {
     const [isModalVisible, setIsModalVisible] = useState(open);
     const dispatch = useDispatch();
+    const { error, errormessage, orderList } = useSelector(store => store.orderDetails);
 
     // console.log(initData, onAction)
     const [form] = Form.useForm();
@@ -21,7 +22,15 @@ const OrderForm = ({ onAction, initData, open }) => {
         let prodValue = products.filter((item) => item.name === initData.product);
         return prodValue[0]?.value;
     }
-
+    const productName = (value) => {
+        let prodName = products.filter((item) => item.value === value);
+        return prodName[0]?.name;
+    }
+    const isNewChanges = (data) => {
+        let tergetOrder = orderList.filter(item => item.id === initData.id);
+        // console.log(tergetOrder, "terget order")
+        return JSON.stringify(data) === JSON.stringify(tergetOrder[0]);
+    }
 
     const handleOk = () => {
 
@@ -29,26 +38,46 @@ const OrderForm = ({ onAction, initData, open }) => {
             .validateFields()
             .then((values) => {
                 form.resetFields();
-                console.log(values);
+                // console.log(values);
                 // dispatch function call
                 let dumData = {
                     id: values.orderId,
                     customer_name: values.customerName,
                     customer_email: values.email,
-                    product: values.product,
+                    product: productName(values.product),
                     quantity: values.quantity
                 }
                 // console.log(dumData,"dum dat")
                 if (initData?.formType === "Create a new order") {
-                    dispatch(createOrder(dumData));
+                    const res = dispatch(createOrder(dumData));
+                    if (res) {
+                        message.success("Order created successfully.")
+                    } else {
+                        message.error(errormessage);
+                    }
+
                 } else {
-                    dispatch(editOrder(dumData));
+                    if (!isNewChanges(dumData)) {
+                        const res = dispatch(editOrder(dumData));
+                        if (res) {
+                            message.success("Order edited successfully.")
+                        } else {
+                            message.error(errormessage);
+                        }
+                    } else {
+                        message.warning("Nothing new to update.")
+                    }
                 }
                 setIsModalVisible(false);
                 onAction(false);
             })
             .catch((info) => {
-                console.log('Validate Failed:', info);
+                // console.log('Validate Failed:', info);
+                Array.isArray(info.errorFields) && info.errorFields.map(item => {
+                    return (
+                        message.error(item.errors[0])
+                    );
+                });
             });
     };
 
@@ -75,13 +104,6 @@ const OrderForm = ({ onAction, initData, open }) => {
             <Modal title={initData?.formType} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} maskClosable={false}
                 okText={initData?.formType === "Create a new order" ? "Create" : "Update"}
                 cancelText="Discard"
-            // footer={[
-            //     <Button key="back" onClick={handleCancel}>
-            //         Discard
-            //     </Button>,
-            //     <Button key="submit" type="primary" onClick={handleOk} >
-            //         Submit
-            //     </Button>]}
             >
                 <div className='orderForm'>
 
@@ -181,19 +203,8 @@ const OrderForm = ({ onAction, initData, open }) => {
                                 },
                             ]}
                         >
-                            <InputNumber min={1} max={10} onChange={(value) => {}} />
+                            <InputNumber min={1} max={100} onChange={(value) => { }} />
                         </Form.Item>
-
-                        {/* <Form.Item
-                            wrapperCol={{
-                                offset: 8,
-                                span: 16,
-                            }}
-                        >
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                        </Form.Item> */}
                     </Form>
                 </div>
             </Modal>

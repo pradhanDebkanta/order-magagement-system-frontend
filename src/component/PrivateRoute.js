@@ -7,7 +7,7 @@ const PrivateRoute = ({ children }) => {
     const { isAuthenticated } = useSelector(store => store.auth);
     const lsData = localStorage.getItem("profile");
     const loginCridentials = lsData ? JSON.parse(lsData) : {};
-    console.log(loginCridentials);
+    // console.log(loginCridentials);
 
     if (Object.keys(loginCridentials).length === 0) {
         return <Navigate to={"/login"} replace />

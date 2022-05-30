@@ -25,7 +25,6 @@ const Index = () => {
     gapi.load("client:auth2", start);
   }, []);
 
-
   return (
     <>{isAuthenticated ? (
       <Navigate to={"/dashboard"} replace />

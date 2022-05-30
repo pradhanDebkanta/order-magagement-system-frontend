@@ -4,15 +4,17 @@ import { clientId } from '../../config/AppConfig';
 import { signOut } from '../../store/actions/auth';
 import { useDispatch } from "react-redux";
 import "../../assert/css/navbar.css";
+import { message } from "antd"
 
 
 const Logout = () => {
     const dispatch = useDispatch();
     const logoutSuccess = () => {
-        console.log("successfully  logout");
+        // console.log("successfully  logout");
         localStorage.clear();
         // here dispatch logout
         dispatch(signOut());
+        message.success("You have logout successfully.")
     }
 
     return (

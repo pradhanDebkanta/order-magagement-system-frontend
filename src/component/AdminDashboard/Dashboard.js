@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import "antd/dist/antd.css";
 import "../../assert/css/dashboard.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { getLimitedOrder,  deleteOrder } from "../../store/actions/dashboard";
+import { getLimitedOrder, deleteOrder } from "../../store/actions/dashboard";
 import { v4 as uuidv4 } from "uuid";
-import { Typography, Row, Col, Tooltip, Pagination, Button } from 'antd';
+import { Typography, Row, Col, Tooltip, Pagination, Button, message } from 'antd';
 import { EditOutlined, DeleteOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 import OrderForm from './OrderForm';
 
@@ -13,14 +13,16 @@ const { Title, Text } = Typography;
 
 
 const Dashboard = () => {
-  const { orderList, totalOrders } = useSelector(store => store.orderDetails);
+  const { orderList, totalOrders, error } = useSelector(store => store.orderDetails);
   const dispatch = useDispatch();
   const [pageNo, setPageNo] = useState(1);
   const [itemCount, setItemCount] = useState(10);
   const [orderCards, setOrderCards] = useState([]);
   const [isModalOpen, setmodalOpen] = useState(false);
   const [initFormData, setInitForm] = useState({});
-  const [rerender, setRerender] = useState(false);
+  const [strOrders, setStrOrders] = useState("");
+
+  console.log(orderList, totalOrders, "dddd");
 
   useEffect(() => {
     let data = {
@@ -31,12 +33,31 @@ const Dashboard = () => {
   }, [pageNo, itemCount]);
 
   useEffect(() => {
-    constructItem(orderList);
-    console.log(orderList, totalOrders, "from dashboard compoment");
-  }, [orderList, totalOrders, rerender]);
+    if (orderList) {
+      console.log("stringify")
+      setStrOrders(JSON.stringify(orderList));
+    }
+  }, [orderList, totalOrders])
+
+  // useEffect(() => {
+  //   constructItem(orderList);
+  //   console.log(orderList, "from dashboard compoment");
+  // }, [orderList]);
+
+  useEffect(() => {
+    if (strOrders) {
+      let orders = JSON.parse(strOrders);
+      console.log(orders, "from dashboard compoment");
+      constructItem(orders);
+    }
+  }, [strOrders]);
 
   const onDeleteOrder = (id) => {
     dispatch(deleteOrder(id));
+    if (!error) {
+      message.success("Order deleted successfully.")
+    }
+
   }
 
   const onPageChange = (page, pageSize) => {
@@ -48,7 +69,6 @@ const Dashboard = () => {
   const onAction = (flag) => {
     console.log(flag);
     setmodalOpen(flag);
-    setRerender(!rerender);
   }
 
   const newOrder = () => {
@@ -60,7 +80,7 @@ const Dashboard = () => {
       quantity: 1,
       formType: "Create a new order"
     }
-    console.log(data);
+    // console.log(data);
     setInitForm(data);
     setmodalOpen(true);
   }
@@ -166,8 +186,9 @@ const Dashboard = () => {
           </div>
         </Col>
       );
-    })
-    setOrderCards(buildData);
+    });
+    console.log(buildData, "build data")
+    setOrderCards([...buildData]);
 
   }
   return (
@@ -189,6 +210,7 @@ const Dashboard = () => {
       <div className='ordersContainer'>
         <div style={{ paddingBottom: "1.25rem" }}>
           <Row gutter={[16, 16]}>
+            {/* {console.log(orderCards, "order cards")} */}
             {orderCards}
           </Row>
         </div>

@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import Logout from '../Auth/Logout';
 import "../../assert/css/navbar.css";
 import { useSelector, } from 'react-redux';
-import { Avatar, Modal, Card } from 'antd';
+import { Avatar, Modal, Card, Tooltip } from 'antd';
 const { Meta } = Card;
 
 const Navbar = () => {
@@ -30,30 +30,32 @@ const Navbar = () => {
             <div className='navbarContainer'>
                 <div className='navbarBox'>
                     <div className='navbar'>
-                        <div className='profile'>
-                            <div className={userData?.imageUrl ? "image" : "letter"} onClick={modalHandeler}>
-                                {userData?.imageUrl ? (
-                                    <Avatar
-                                        src={userData.imageUrl}
-                                        size={40}
-                                    />
-                                ) : (
-                                    <Avatar
-                                        style={{
-                                            backgroundColor: '#F9F3EE',
-                                            color: "#FEB139",
-                                            fontSize: "20px",
-                                            borderRadius: "100%",
-                                            fontWeight: 700,
-                                        }}
-                                        shape={"circle"}
-                                        size={40}
-                                    >
-                                        {letter}
-                                    </Avatar>
-                                )}
+                        <Tooltip placement="right" title="Click to view profile.">
+                            <div className='profile'>
+                                <div className={userData?.imageUrl ? "image" : "letter"} onClick={modalHandeler}>
+                                    {userData?.imageUrl ? (
+                                        <Avatar
+                                            src={userData.imageUrl}
+                                            size={40}
+                                        />
+                                    ) : (
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: '#F9F3EE',
+                                                color: "#FEB139",
+                                                fontSize: "20px",
+                                                borderRadius: "100%",
+                                                fontWeight: 700,
+                                            }}
+                                            shape={"circle"}
+                                            size={40}
+                                        >
+                                            {letter}
+                                        </Avatar>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        </Tooltip>
                         <div style={{ borderRadius: "50px" }}>
                             <Logout />
                         </div>

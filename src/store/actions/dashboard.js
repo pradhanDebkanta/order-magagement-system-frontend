@@ -52,6 +52,7 @@ export const createOrder = (data) => async dispatch => {
             type: CREATE_ORDER,
             payload: res.data
         })
+        return true;
 
     } catch (err) {
         // order fetching error
@@ -60,6 +61,7 @@ export const createOrder = (data) => async dispatch => {
             type: ERROR_IN_ORDER,
             payload: err
         })
+        return false
     }
 }
 
@@ -71,7 +73,7 @@ export const editOrder = (data) => async dispatch => {
             type: EDIT_ORDER,
             payload: res.data
         })
-
+        return true;
     } catch (err) {
         // order fetching error
         console.log(err);
@@ -79,6 +81,7 @@ export const editOrder = (data) => async dispatch => {
             type: ERROR_IN_ORDER,
             payload: err
         })
+        return false;
     }
 }
 

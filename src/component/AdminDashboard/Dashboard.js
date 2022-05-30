@@ -10,58 +10,57 @@ import OrderForm from './OrderForm';
 
 
 const { Title, Text } = Typography;
-
+const defaultPageSize = [10, 25, 50, 100]
 
 const Dashboard = () => {
-  const { orderList, totalOrders, error } = useSelector(store => store.orderDetails);
+  const { orderList, totalOrders } = useSelector(store => store.orderDetails);
   const dispatch = useDispatch();
   const [pageNo, setPageNo] = useState(1);
-  const [itemCount, setItemCount] = useState(10);
+  const [itemCount, setItemCount] = useState(defaultPageSize[0]);
   const [orderCards, setOrderCards] = useState([]);
   const [isModalOpen, setmodalOpen] = useState(false);
   const [initFormData, setInitForm] = useState({});
-  const [strOrders, setStrOrders] = useState("");
+  const [rerender, setRerender] = useState(false);
 
-  console.log(orderList, totalOrders, "dddd");
+  // console.log(orderList, totalOrders, "dddd");
 
   useEffect(() => {
     let data = {
       pageNo,
       itemCount
     }
-    dispatch(getLimitedOrder(data));
+    dispatch(getLimitedOrder(data)).then(res => {
+      // console.log(res, "get order");
+      if (res?.status === 200) {
+        message.success("successfully fetch.");
+      } else {
+        message.error(res.message);
+      }
+    })
   }, [pageNo, itemCount]);
 
-  useEffect(() => {
-    if (orderList) {
-      console.log("stringify")
-      setStrOrders(JSON.stringify(orderList));
-    }
-  }, [orderList, totalOrders])
-
-  // useEffect(() => {
-  //   constructItem(orderList);
-  //   console.log(orderList, "from dashboard compoment");
-  // }, [orderList]);
 
   useEffect(() => {
-    if (strOrders) {
-      let orders = JSON.parse(strOrders);
-      console.log(orders, "from dashboard compoment");
-      constructItem(orders);
-    }
-  }, [strOrders]);
+    // console.log(orderList, "from dashboard compoment");
+    constructItem(orderList);
+  }, [rerender, orderList]);
+
+  const forceRerender = () => {
+    setRerender(!rerender);
+  }
 
   const onDeleteOrder = (id) => {
-    dispatch(deleteOrder(id));
-    if (!error) {
-      message.success("Order deleted successfully.")
-    }
-
+    dispatch(deleteOrder(id)).then((res) => {
+      if (res?.status === 200) {
+        message.success("Order deleted successfully.");
+      } else {
+        message.error(res.message);
+      }
+    });
   }
 
   const onPageChange = (page, pageSize) => {
-    console.log(page, pageSize);
+    // console.log(page, pageSize);
     setPageNo(page);
     setItemCount(pageSize);
   }
@@ -96,9 +95,11 @@ const Dashboard = () => {
 
   }
 
-  function constructItem(totalOrders) {
-    let buildData = totalOrders?.map((item, idx) => {
-      // console.log("call", item.id)
+  function constructItem(totalOrder) {
+    // console.log(totalOrder, "inside construct item");
+
+    let buildData = totalOrder.length !== 0 && totalOrder.map((item, idx) => {
+      // console.log("call", item)
       return (
         <Col xs={24} sm={24} md={24} lg={12} xl={12} key={item.id}>
           <div className="card">
@@ -187,8 +188,8 @@ const Dashboard = () => {
         </Col>
       );
     });
-    console.log(buildData, "build data")
-    setOrderCards([...buildData]);
+    // console.log(buildData, "build data")
+    setOrderCards(buildData);
 
   }
   return (
@@ -220,14 +221,14 @@ const Dashboard = () => {
         <div className='paginationBox'>
           <div></div>
           <div className='pagination'>
-            <Pagination showQuickJumper defaultCurrent={1} total={totalOrders} onChange={onPageChange} />
+            <Pagination showQuickJumper defaultCurrent={1} total={totalOrders} onChange={onPageChange} pageSizeOptions={defaultPageSize}/>
           </div>
         </div>
       </div>
 
       {
         isModalOpen && (
-          <OrderForm onAction={onAction} initData={initFormData} open={isModalOpen} />
+          <OrderForm onAction={onAction} initData={initFormData} open={isModalOpen} forceRerender={forceRerender} />
         )
       }
 

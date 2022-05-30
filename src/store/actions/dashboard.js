@@ -5,11 +5,11 @@ import { GET_ORDER, CREATE_ORDER, EDIT_ORDER, ERROR_IN_ORDER, DELETE_ORDER, GET_
 export const getAllOrder = () => async dispatch => {
     try {
         const res = await ApiService.get("/orderDetails");
-        console.log(res);
-        // dispatch({
-        //     type: GET_ALLL_ORDER,
-        //     payload: res
-        // });
+        // console.log(res);
+        dispatch({
+            type: GET_ALLL_ORDER,
+            payload: res.data
+        });
 
     } catch (err) {
         // order fetching error
@@ -23,16 +23,18 @@ export const getAllOrder = () => async dispatch => {
 
 export const getLimitedOrder = (body) => async dispatch => {
     try {
-        const { data, headers } = await ApiService.get(`/orderDetails?_page=${body.pageNo}&_limit=${body.itemCount}`)
+        const res = await ApiService.get(`/orderDetails?_page=${body.pageNo}&_limit=${body.itemCount}`);
+        const { data, headers } = res;
         let payloadData = {
             data,
             totalItem: headers["x-total-count"]
         }
-        console.log(payloadData, "from getLimitedOrder");
+        // console.log(payloadData, "from getLimitedOrder");
         dispatch({
             type: GET_ORDER,
             payload: payloadData
-        })
+        });
+        return res;
 
     } catch (err) {
         // order fetching error
@@ -40,7 +42,8 @@ export const getLimitedOrder = (body) => async dispatch => {
         dispatch({
             type: ERROR_IN_ORDER,
             payload: err
-        })
+        });
+        return err;
     }
 }
 
@@ -52,7 +55,7 @@ export const createOrder = (data) => async dispatch => {
             type: CREATE_ORDER,
             payload: res.data
         })
-        return true;
+        return res;
 
     } catch (err) {
         // order fetching error
@@ -61,19 +64,19 @@ export const createOrder = (data) => async dispatch => {
             type: ERROR_IN_ORDER,
             payload: err
         })
-        return false
+        return err
     }
 }
 
 export const editOrder = (data) => async dispatch => {
     try {
         const res = await ApiService.patch(`/orderDetails/${data.id}`, {}, data)
-        console.log(res.data, "from editOrder");
+        // console.log(res.data, "from editOrder");
         dispatch({
             type: EDIT_ORDER,
             payload: res.data
         })
-        return true;
+        return res;
     } catch (err) {
         // order fetching error
         console.log(err);
@@ -81,24 +84,26 @@ export const editOrder = (data) => async dispatch => {
             type: ERROR_IN_ORDER,
             payload: err
         })
-        return false;
+        return err;
     }
 }
 
 export const deleteOrder = (id) => async dispatch => {
     try {
         const res = await ApiService.delete(`/orderDetails/${id}`, {})
-        console.log(res, "from deleteOrder");
+        // console.log(res, "from deleteOrder");
         dispatch({
             type: DELETE_ORDER,
             payload: { id },
         })
+        return res;
     } catch (err) {
         // order fetching error
         console.log(err);
         dispatch({
             type: ERROR_IN_ORDER,
             payload: err
-        })
+        });
+        return err;
     }
 }

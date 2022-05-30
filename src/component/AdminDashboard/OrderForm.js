@@ -10,12 +10,11 @@ const products = [
     { value: "product3", name: "Product 3" },
 ]
 
-const OrderForm = ({ onAction, initData, open }) => {
+const OrderForm = ({ onAction, initData, open, forceRerender }) => {
     const [isModalVisible, setIsModalVisible] = useState(open);
     const dispatch = useDispatch();
-    const { error, errormessage, orderList } = useSelector(store => store.orderDetails);
+    const { orderList } = useSelector(store => store.orderDetails);
 
-    // console.log(initData, onAction)
     const [form] = Form.useForm();
 
     const productValue = () => {
@@ -49,21 +48,25 @@ const OrderForm = ({ onAction, initData, open }) => {
                 }
                 // console.log(dumData,"dum dat")
                 if (initData?.formType === "Create a new order") {
-                    const res = dispatch(createOrder(dumData));
-                    if (res) {
-                        message.success("Order created successfully.")
-                    } else {
-                        message.error(errormessage);
-                    }
-
+                    dispatch(createOrder(dumData)).then(res => {
+                        // console.log(res,"533333333333")
+                        if (res?.status === 200 || res?.status === 201) {
+                            message.success("Order created successfully.");
+                            forceRerender();
+                        } else {
+                            message.error(res.message);
+                        }
+                    })
                 } else {
                     if (!isNewChanges(dumData)) {
-                        const res = dispatch(editOrder(dumData));
-                        if (res) {
-                            message.success("Order edited successfully.")
-                        } else {
-                            message.error(errormessage);
-                        }
+                        dispatch(editOrder(dumData)).then(res => {
+                            if (res?.status === 200) {
+                                message.success("Order edited successfully.")
+                                forceRerender();
+                            } else {
+                                message.error(res.message);
+                            }
+                        })
                     } else {
                         message.warning("Nothing new to update.")
                     }
@@ -96,7 +99,7 @@ const OrderForm = ({ onAction, initData, open }) => {
     // };
 
     const onProductChange = (value) => {
-        console.log(value, "product")
+        // console.log(value, "product")
     }
 
     return (

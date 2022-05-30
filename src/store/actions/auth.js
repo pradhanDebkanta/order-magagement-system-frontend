@@ -5,7 +5,7 @@ export const signIn = (data) => dispatch => {
         type: LOGIN,
         payload: data
     });
-    console.log("signin action call");
+    // console.log("signin action call");
 }
 
 export const signOut = () => dispatch => {
@@ -13,12 +13,12 @@ export const signOut = () => dispatch => {
         type: LOGOUT,
         payload: {}
     });
-    console.log("signut action call");
+    // console.log("signut action call");
 }
 export const signInError = (data) => dispatch => {
     dispatch({
         type: LOGIN_ERROR,
         payload: data
     });
-    console.log("signin error action call");
+    // console.log("signin error action call");
 }

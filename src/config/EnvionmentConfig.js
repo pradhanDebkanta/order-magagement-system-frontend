@@ -12,7 +12,7 @@ const test = {
 };
 
 const getEnv = () => {
-    // console.log(process.env.NODE_ENV)
+    console.log(process.env.NODE_ENV)
     switch (process.env.NODE_ENV) {
         case "localhost":
             return local;

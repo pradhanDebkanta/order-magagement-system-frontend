@@ -21,6 +21,8 @@ const Dashboard = () => {
   const [isModalOpen, setmodalOpen] = useState(false);
   const [initFormData, setInitForm] = useState({});
   const [rerender, setRerender] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [deletedId, setDeletedId] = useState("");
 
   // console.log(orderList, totalOrders, "dddd");
 
@@ -50,13 +52,17 @@ const Dashboard = () => {
   }
 
   const onDeleteOrder = (id) => {
-    dispatch(deleteOrder(id)).then((res) => {
-      if (res?.status === 200) {
-        message.success("Order deleted successfully.");
-      } else {
-        message.error(res.message);
-      }
-    });
+    setDeletedId(id);
+    if (deletedId !== id) {
+      dispatch(deleteOrder(id)).then((res) => {
+        forceRerender();
+        if (res?.status === 200) {
+          message.success("Order deleted successfully.");
+        } else {
+          message.error(res.message);
+        }
+      });
+    }
   }
 
   const onPageChange = (page, pageSize) => {
@@ -158,23 +164,30 @@ const Dashboard = () => {
                     <div>
                       <Row >
                         <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                          <div className='iconBox'
-                            onClick={() => editOrder({
-                              id: item.id,
-                              customerName: item?.customer_name,
-                              customerEmail: item?.customer_email,
-                              product: item?.product,
-                              quantity: item?.quantity,
-                            })}>
+                          <div className='iconBox'>
                             <Tooltip title="Edit this order">
-                              <EditOutlined style={{ fontSize: '16px', color: '#00FFAB' }} />
+                              <Button style={{ border: "none" }}
+                                onClick={() => editOrder({
+                                  id: item.id,
+                                  customerName: item?.customer_name,
+                                  customerEmail: item?.customer_email,
+                                  product: item?.product,
+                                  quantity: item?.quantity,
+                                })}>
+                                <EditOutlined style={{ fontSize: '16px', color: '#00FFAB' }} />
+                              </Button>
                             </Tooltip>
                           </div>
                         </Col>
                         <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                          <div className='iconBox' onClick={() => onDeleteOrder(item.id)}>
+                          <div className='iconBox'>
                             <Tooltip title="Delete this order">
-                              <DeleteOutlined style={{ fontSize: '16px', color: '#F32424' }} />
+                              <Button style={{ border: "none" }}
+                                onClick={() => onDeleteOrder(item.id)}
+                              // disabled={loading}
+                              >
+                                <DeleteOutlined style={{ fontSize: '16px', color: '#F32424' }} />
+                              </Button>
                             </Tooltip>
                           </div>
                         </Col>
@@ -221,7 +234,7 @@ const Dashboard = () => {
         <div className='paginationBox'>
           <div></div>
           <div className='pagination'>
-            <Pagination showQuickJumper defaultCurrent={1} total={totalOrders} onChange={onPageChange} pageSizeOptions={defaultPageSize}/>
+            <Pagination showQuickJumper defaultCurrent={1} total={totalOrders} onChange={onPageChange} pageSizeOptions={defaultPageSize} />
           </div>
         </div>
       </div>

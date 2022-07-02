@@ -52,7 +52,6 @@ const OrderForm = ({ onAction, initData, open, forceRerender }) => {
                         // console.log(res,"533333333333")
                         if (res?.status === 200 || res?.status === 201) {
                             message.success("Order created successfully.");
-                            forceRerender();
                         } else {
                             message.error(res.message);
                         }
@@ -62,7 +61,6 @@ const OrderForm = ({ onAction, initData, open, forceRerender }) => {
                         dispatch(editOrder(dumData)).then(res => {
                             if (res?.status === 200) {
                                 message.success("Order edited successfully.")
-                                forceRerender();
                             } else {
                                 message.error(res.message);
                             }

@@ -20,9 +20,8 @@ const Dashboard = () => {
   const [orderCards, setOrderCards] = useState([]);
   const [isModalOpen, setmodalOpen] = useState(false);
   const [initFormData, setInitForm] = useState({});
-  const [rerender, setRerender] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [deletedId, setDeletedId] = useState("");
+
+  const tempDeletedOrdr = [];
 
   // console.log(orderList, totalOrders, "dddd");
 
@@ -39,30 +38,39 @@ const Dashboard = () => {
         message.error(res.message);
       }
     })
-  }, [pageNo, itemCount]);
+  }, [pageNo, itemCount, dispatch]);
 
 
   useEffect(() => {
     // console.log(orderList, "from dashboard compoment");
     constructItem(orderList);
-  }, [rerender, orderList]);
+  }, [orderList]);
 
-  const forceRerender = () => {
-    setRerender(!rerender);
-  }
 
   const onDeleteOrder = (id) => {
-    setDeletedId(id);
-    if (deletedId !== id) {
+    let flag = tempDeletedOrdr.find((item) => item === id);
+    if (flag === undefined) {
+      tempDeletedOrdr.splice(0, tempDeletedOrdr.length);
+      tempDeletedOrdr.push(id);
       dispatch(deleteOrder(id)).then((res) => {
-        forceRerender();
         if (res?.status === 200) {
           message.success("Order deleted successfully.");
         } else {
           message.error(res.message);
         }
       });
+    } else {
+      message.warning("Please wait this order is deleting.");
     }
+    // if (deletedId !== id) {
+    //   dispatch(deleteOrder(id)).then((res) => {
+    //     if (res?.status === 200) {
+    //       message.success("Order deleted successfully.");
+    //     } else {
+    //       message.error(res.message);
+    //     }
+    //   });
+    // }
   }
 
   const onPageChange = (page, pageSize) => {
@@ -241,7 +249,7 @@ const Dashboard = () => {
 
       {
         isModalOpen && (
-          <OrderForm onAction={onAction} initData={initFormData} open={isModalOpen} forceRerender={forceRerender} />
+          <OrderForm onAction={onAction} initData={initFormData} open={isModalOpen} />
         )
       }
 

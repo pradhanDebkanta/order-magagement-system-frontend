@@ -10,22 +10,29 @@ const initialState = {
 
 const orderDetails = (state = initialState, action) => {
     const { type, payload } = action;
+    let curItem = state.totalOrders;
     switch (type) {
         case CREATE_ORDER:
-            state.orderList.pop();
-            state.orderList.unshift(payload);
+            const deepCopy = [...state.orderList];
+            deepCopy.pop();
+            deepCopy.unshift(payload);
             // console.log(state,"create order store");
+            curItem++
             return {
                 ...state,
+                orderList: deepCopy,
+                totalOrders: curItem,
                 loading: false,
                 error: false,
                 errormessage: '',
             }
         case DELETE_ORDER:
-            let temp1 = state.orderList?.filter((item) => item.id !== payload.id)
+            let temp1 = state.orderList?.filter((item) => item.id !== payload.id);
+            curItem--;
             return {
                 ...state,
                 orderList: temp1,
+                totalOrders: curItem,
                 loading: false,
                 error: false,
                 errormessage: '',
